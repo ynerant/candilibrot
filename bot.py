@@ -10,9 +10,9 @@ import requests
 import smtplib
 
 
-# API_PREFIX = "https://beta.interieur.gouv.fr/candilib/api/v2/"
+API_PREFIX = "https://beta.interieur.gouv.fr/candilib/api/v2/"
 # API_PREFIX = "https://candilib.ynerant.fr/candilib/api/v2/"
-API_PREFIX = "http://localhost/candilib/api/v2/"
+# API_PREFIX = "http://localhost/candilib/api/v2/"
 
 CAPTCHA_IMAGES = {
     "L'avion": "airplane",
@@ -168,14 +168,15 @@ def main(token: str) -> None:
             dpt.count += centre.count
 
     places = Places(**api('places', token, user_id))
-    for dpt in departements:
-        for centre in dpt.centres:
-            if centre._id == places.centre['_id']:
-                places.centre = centre
-                break
-        else:
-            continue
-        break
+    if places.centre:
+        for dpt in departements:
+            for centre in dpt.centres:
+                if centre._id == places.centre['_id']:
+                    places.centre = centre
+                    break
+            else:
+                continue
+            break
 
     if places.date:
         print(f"Vous avez déjà une date d'examen, le {places.date}.")
@@ -191,7 +192,8 @@ def main(token: str) -> None:
             send_mail(json.dumps(dates, indent=2), centre.nom)
             centre.dates = dates
 
-    PREFERRED_CENTRES = ["MASSY", "RUNGIS", "ETAMPES", "SAINT CLOUD", "SAINT PRIEST"]
+    PREFERRED_CENTRES = ["MASSY", "ANTONY", "RUNGIS", "MONTGERON", "CLAMART", "SAINT CLOUD", "EVRY",
+                         "VILLABE", "ETAMPES", "VELIZY VILLACOUBLAY", "MAISONS ALFORT", "TRAPPES", "SAINT PRIEST"]
 
     for name in PREFERRED_CENTRES:
         for dpt in departements:
