@@ -191,7 +191,7 @@ def main(token: str) -> None:
             send_mail(json.dumps(dates, indent=2), centre.nom)
             centre.dates = dates
 
-    PREFERRED_CENTRES = ["MASSY", "RUNGIS", "ETAMPES", "SAINT CLOUD", "SAINT PRIEST", "LA TRONCHE"]
+    PREFERRED_CENTRES = ["MASSY", "RUNGIS", "ETAMPES", "SAINT CLOUD", "SAINT PRIEST"]
 
     for name in PREFERRED_CENTRES:
         for dpt in departements:
